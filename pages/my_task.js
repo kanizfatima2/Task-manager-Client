@@ -2,6 +2,7 @@ import { useContext } from "react";
 import MyTask from "../Component/MyTask/MyTask";
 import { AuthContext } from "../AuthProvider/Authprovider";
 import { useQuery } from '@tanstack/react-query';
+import Loading from "../Loading/Loading";
 
 const my_task = () => {
     const { user } = useContext(AuthContext)
@@ -21,7 +22,9 @@ const my_task = () => {
         }
     })
     console.log(tasks)
-
+    if (isLoading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div>
