@@ -1,13 +1,13 @@
 import { MdFileDownloadDone } from 'react-icons/md';
-
 import { AiTwotoneEdit } from 'react-icons/ai';
 import { RiDeleteBinFill } from 'react-icons/ri'
 
 
-const MyTask = () => {
+const MyTask = ({ t, refetch }) => {
+    const { task, image } = t;
     return (
-        <><h5 className="text-xl font-medium text-gray-900 dark:text-white text-center mt-16 mb-5">My Task</h5>
-            <div className="lg:px-96 lg:ml-28">
+        <>
+            <div className="lg:px-96 lg:ml-28 mb-5">
 
 
                 <div>
@@ -15,9 +15,9 @@ const MyTask = () => {
                         <div className="space-y-6" action="#">
                             {/* content  */}
                             <div className="flex justify-between">
-                                <img className="w-24 h-20 rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStcLJjW4q3WawvgG5l1h-DWsZI0SuMEUgeRg&usqp=CAU" alt="Default avatar"></img>
+                                <img className="w-24 h-20 rounded" src={image} alt="Default avatar"></img>
 
-                                <p className="pl-2 bg-gray-50 flex  items-center">An image is a visual representation of something!</p>
+                                <p className="pl-2 bg-gray-50 flex  items-center">{task}</p>
 
                                 {/* buttons  */}
                                 <div className="p-2 flex justify-center items-center">
