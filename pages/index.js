@@ -1,11 +1,49 @@
 import Head from 'next/head'
-
-
-import { BsCloudUploadFill } from 'react-icons/bs';
-
-
+import { useContext } from 'react';
+// import { BsCloudUploadFill } from 'react-icons/bs';
+import { AuthContext } from "../AuthProvider/Authprovider";
 
 export default function Home() {
+  const { user } = useContext(AuthContext)
+  const imageHostKey = process.env.Image_Key;
+  console.log(imageHostKey)
+
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const task = form.task.value;
+    const email = user?.email || 'unregistered';
+
+    // console.log(task);
+
+    const taskData = {
+      task: task,
+      status: null,
+      image: "photoURL",
+      email
+    };
+
+    console.log(taskData);
+    fetch("http://localhost:5000/addTask", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(taskData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        // if (data.acknowledged) {
+        //   toast.success("Successfully Added!");
+        // }
+        form.reset();
+      });
+  };
+
+
+
+
   return (
     <>
       <Head>
@@ -20,7 +58,7 @@ export default function Home() {
 
 
         <div className="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-md sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-          <form>
+          <form onSubmit={handleAddTask}>
             <div className="space-y-6" action="#">
               <h5 className="text-xl font-medium text-gray-900 dark:text-white text-center">Add Your Task</h5>
 
@@ -30,24 +68,23 @@ export default function Home() {
               </div>
 
 
-              <div className="flex items-center justify-center w-full">
+              {/* <div className="flex items-center justify-center w-full">
                 <label for="dropzone-file" className="flex flex-col items-center justify-center w-full max-h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    {/* <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg> */}
+
                     <BsCloudUploadFill></BsCloudUploadFill>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop(only image)</p>
-                    {/* <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p> */}
                   </div>
                   <input id="dropzone-file" type="file" name="file" className="hidden" />
                 </label>
-              </div>
+              </div> */}
 
 
-              <button type="submit" className="w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-indigo-800 dark:focus:ring-blue-800">Create</button>
+              <input type="submit" value="Create" className="w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-indigo-800 dark:focus:ring-blue-800" />
             </div>
           </form>
         </div>
       </div>
     </>
-  )
+  );
 }
