@@ -11,7 +11,7 @@ const my_task = () => {
         queryKey: ['tasks'],
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/addTask?email=${user?.email}`)
+                const res = await fetch(`https://task-manager-server-side-phi.vercel.app/addTask?email=${user?.email}`)
                 const data = await res.json();
                 return data.data;
 
