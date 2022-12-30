@@ -16,7 +16,7 @@ const CompletedTask = () => {
                             <div className="flex justify-between">
                                 <img className="w-24 h-20 rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStcLJjW4q3WawvgG5l1h-DWsZI0SuMEUgeRg&usqp=CAU" alt="Default avatar"></img>
 
-                                <p className="pl-2 bg-gray-50 flex  items-center">{task}</p>
+                                <p className="pl-2 bg-gray-50 flex  items-center">My Task</p>
 
                                 {/* buttons  */}
                                 <div className="p-2 flex justify-center items-center">
