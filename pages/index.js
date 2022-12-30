@@ -9,11 +9,11 @@ import toast from 'react-hot-toast';
 export default function Home() {
 
   const { user } = useContext(AuthContext)
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const imageHostKey = '7cf80fb1cd672c8c2a1fa578e87db0f5';
   console.log(imageHostKey)
 
-  const handleAddTask = data => {
+  const handleAddTask = (data, e) => {
     const email = user?.email || 'unregistered';
     const image = data.image[0];
     const formData = new FormData();
@@ -50,6 +50,7 @@ export default function Home() {
 
               toast.success(`Your Task is added successfully`)
               // navigate('/dashboard/manageDoctors')
+              e.target.reset();
             })
         }
       })
