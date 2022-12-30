@@ -4,7 +4,27 @@ import { RiDeleteBinFill } from 'react-icons/ri'
 
 
 const MyTask = ({ t, refetch }) => {
-    const { task, image } = t;
+    const { task, image, _id } = t;
+
+    // Delete Task 
+    const handleDelete = (id) => {
+        const proceed = window.confirm('Are you sure,you want to delete?');
+        if (proceed) {
+            fetch(`http://localhost:5000/addTask/${t._id}`, {
+                method: 'DELETE'
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        // toast.success(` ${doctor.name} Successfully Deleted`)
+                        refetch()
+                    }
+                })
+        }
+
+    }
+
     return (
         <>
             <div className="lg:px-96 lg:ml-28 mb-5">
@@ -29,7 +49,7 @@ const MyTask = ({ t, refetch }) => {
 
                                     <button className="text-xl  font-bold p-2 rounded-lg flex justify-center items-center"><AiTwotoneEdit></AiTwotoneEdit></button>
 
-                                    <button className="text-xl text-red-600  font-bold p-2 rounded-lg flex justify-center items-center"><RiDeleteBinFill></RiDeleteBinFill></button>
+                                    <button onClick={() => handleDelete(_id)} className="text-xl text-red-600  font-bold p-2 rounded-lg flex justify-center items-center"><RiDeleteBinFill></RiDeleteBinFill></button>
 
                                 </div>
                             </div>
