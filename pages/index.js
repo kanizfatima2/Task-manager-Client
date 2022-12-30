@@ -3,6 +3,8 @@ import { useContext } from 'react';
 // import { BsCloudUploadFill } from 'react-icons/bs';
 import { AuthContext } from "../AuthProvider/Authprovider";
 import { useForm } from 'react-hook-form';
+import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export default function Home() {
 
@@ -29,7 +31,7 @@ export default function Home() {
           const task = {
             task: data.task,
             email,
-            image: imgData.data.url
+            image: imgData.data.url,
 
           }
           console.log(task)
@@ -46,7 +48,7 @@ export default function Home() {
             .then(result => {
               console.log(result)
 
-              // toast.success(`${data.name} is added successfully`)
+              toast.success(`Your Task is added successfully`)
               // navigate('/dashboard/manageDoctors')
             })
         }
@@ -85,6 +87,7 @@ export default function Home() {
               </div>
 
               <input type="submit" value="Create" className="w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-indigo-800 dark:focus:ring-blue-800" />
+              <Toaster />
             </div>
           </form>
         </div>

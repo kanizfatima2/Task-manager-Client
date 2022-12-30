@@ -1,6 +1,9 @@
 import { MdFileDownloadDone } from 'react-icons/md';
 import { AiTwotoneEdit } from 'react-icons/ai';
 import { RiDeleteBinFill } from 'react-icons/ri'
+import Link from 'next/link';
+import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 
 const MyTask = ({ t, refetch }) => {
@@ -17,7 +20,7 @@ const MyTask = ({ t, refetch }) => {
                 .then(data => {
                     console.log(data);
                     if (data.success) {
-                        // toast.success(` ${doctor.name} Successfully Deleted`)
+                        toast.success(` Successfully Deleted`)
                         refetch()
                     }
                 })
@@ -42,7 +45,7 @@ const MyTask = ({ t, refetch }) => {
                                 {/* buttons  */}
                                 <div className="p-2 flex justify-center items-center">
 
-                                    <button className="bg-green-400 font-medium p-2 rounded-lg flex justify-center items-center"><MdFileDownloadDone></MdFileDownloadDone>complete</button>
+                                    <Link href="/completed_task" className="bg-green-400 font-medium p-2 rounded-lg flex justify-center items-center"><MdFileDownloadDone></MdFileDownloadDone>complete</Link>
 
                                     {/* DropDown  */}
 
@@ -50,7 +53,7 @@ const MyTask = ({ t, refetch }) => {
                                     <button className="text-xl  font-bold p-2 rounded-lg flex justify-center items-center"><AiTwotoneEdit></AiTwotoneEdit></button>
 
                                     <button onClick={() => handleDelete(_id)} className="text-xl text-red-600  font-bold p-2 rounded-lg flex justify-center items-center"><RiDeleteBinFill></RiDeleteBinFill></button>
-
+                                    <Toaster />
                                 </div>
                             </div>
                         </div>
