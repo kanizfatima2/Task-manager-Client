@@ -2,47 +2,56 @@ import Head from 'next/head'
 import { useContext } from 'react';
 // import { BsCloudUploadFill } from 'react-icons/bs';
 import { AuthContext } from "../AuthProvider/Authprovider";
+import { useForm } from 'react-hook-form';
 
 export default function Home() {
+
   const { user } = useContext(AuthContext)
-  const imageHostKey = process.env.Image_Key;
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const imageHostKey = '7cf80fb1cd672c8c2a1fa578e87db0f5';
   console.log(imageHostKey)
 
-  const handleAddTask = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const task = form.task.value;
+  const handleAddTask = data => {
     const email = user?.email || 'unregistered';
+    const image = data.image[0];
+    const formData = new FormData();
+    formData.append('image', image)
+    const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`
 
-    // console.log(task);
-
-    const taskData = {
-      task: task,
-      status: null,
-      image: "photoURL",
-      email
-    };
-
-    console.log(taskData);
-    fetch("http://localhost:5000/addTask", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(taskData),
+    fetch(url, {
+      method: 'POST',
+      body: formData
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        // if (data.acknowledged) {
-        //   toast.success("Successfully Added!");
-        // }
-        form.reset();
-      });
-  };
+      .then(res => res.json())
+      .then(imgData => {
+        if (imgData.success) {
+          // data
+          const task = {
+            task: data.task,
+            email,
+            image: imgData.data.url
 
+          }
+          console.log(task)
+          // save all task data to database 
+          fetch(`http://localhost:5000/addTask`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
 
+            },
+            body: JSON.stringify(task)
+          })
+            .then(res => res.json())
+            .then(result => {
+              console.log(result)
 
+              // toast.success(`${data.name} is added successfully`)
+              // navigate('/dashboard/manageDoctors')
+            })
+        }
+      })
+  }
 
   return (
     <>
@@ -57,28 +66,23 @@ export default function Home() {
       <div className="lg:px-96 lg:ml-28 mt-16 ">
 
 
-        <div className="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-md sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-          <form onSubmit={handleAddTask}>
+        <div className="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-lg sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 ">
+          <form onSubmit={handleSubmit(handleAddTask)}>
             <div className="space-y-6" action="#">
               <h5 className="text-xl font-medium text-gray-900 dark:text-white text-center">Add Your Task</h5>
 
               <label for="website-admin" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
               <div className="flex">
-                <input type="text" name="task" id="website-admin" className=" rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder='+ add task' />
+
+                <input type="text" {...register("task", { required: true })}
+                  id="website-admin" className=" rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-lg" placeholder='+ add task' />
+                {errors.task && <span><small className='text-red-600'>name is required</small></span>}
               </div>
 
-
-              {/* <div className="flex items-center justify-center w-full">
-                <label for="dropzone-file" className="flex flex-col items-center justify-center w-full max-h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-
-                    <BsCloudUploadFill></BsCloudUploadFill>
-                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop(only image)</p>
-                  </div>
-                  <input id="dropzone-file" type="file" name="file" className="hidden" />
-                </label>
-              </div> */}
-
+              <div className=" rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="file" {...register("image", { required: true })} className=" rounded-lg shadow-lg" />
+                {errors.image && <span><small className='text-red-600'>Image is required</small></span>}
+              </div>
 
               <input type="submit" value="Create" className="w-full text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-indigo-800 dark:focus:ring-blue-800" />
             </div>
