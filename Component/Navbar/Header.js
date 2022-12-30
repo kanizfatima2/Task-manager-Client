@@ -13,7 +13,7 @@ const Header = () => {
         logOut()
             .then(() => { })
             .then((error) => {
-                // console.error(error);
+                console.error(error);
             });
     }
 
